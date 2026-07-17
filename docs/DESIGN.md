@@ -235,7 +235,7 @@ Sound (8-bit, 무료 CC0)
 - 소스: Pixabay / OpenGameArt의 CC0 8-bit 음원에서 선택. *(확인 필요: 최종 음원은 구현 단계에서 후보 제시)*
 - 구성: BGM 루프 1개(잔잔한 칩튠) + SFX 4개(클릭 / 담기 / 삭제 / 봇짐 매기·완료).
 - 파일 위치 — BGM은 `bgm/bottari_bgm.mp3`, SFX는 `sound/`에 `sfx_click.mp3`, `sfx_add.mp3`, `sfx_remove.mp3`, `sfx_tie.mp3`. 교체 시 파일만 갈아끼우면 되도록 이름 고정.
-- 음원은 -16 LUFS로 정규화해서 넣는다(재생 측 볼륨 보정 없음).
+- 음원은 -14 LUFS(스트리밍 표준)로 정규화해서 넣는다(재생 측 볼륨 보정 없음).
 - **기본 ON.** 단, autoplay 정책상 부팅 즉시 재생은 불가 — 첫 클릭/터치에서 시작. 토글 OFF 시 즉시 정지. 상태는 localStorage 유지.
 
 ---

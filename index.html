@@ -805,7 +805,7 @@ function openSettings(){
   document.getElementById('sndToggle').classList.toggle('on', settings.soundEnabled);
   openModal('mdSettings');
 }
-/* BGM (FN-22) — 음원은 표준 라우드니스 -16 LUFS로 정규화되어 있어 재생 측 증폭이 필요 없다 */
+/* BGM (FN-22) — 음원은 스트리밍 표준 -14 LUFS로 정규화되어 있어 재생 측 증폭이 필요 없다 */
 function toggleSound(){
   settings.soundEnabled = !settings.soundEnabled;
   document.getElementById('sndToggle').classList.toggle('on', settings.soundEnabled);

@@ -522,6 +522,7 @@ function go(id){
 /* FN-12: 엔딩 영상 — ended/재생 실패/탭 3종 트리거로 SCR-10 */
 function startEnding(){
   const v = document.getElementById('endVid');
+  v.muted = true;   // 영상에 BGM 트랙이 내장돼 있다 — muted 속성만으론 일부 모바일에서 소리가 새므로 재생 직전 강제
   v.style.opacity = 1;
   v.currentTime = 0;
   // 3초부터 검정으로 fade out(1s) → 4.3초에 컷 — 8초 영상을 3~4초 지점에서 마무리 (2026-07-17 확정)
@@ -719,8 +720,23 @@ function shareUrlBtn(){
   if (navigator.share) navigator.share({ title:'보따리', url:document.getElementById('shareUrl').value }).catch(()=>{});
   else toast('(프로토타입) Web Share 미지원 — 실서비스에서는 버튼 숨김');
 }
+/* BGM 페이드아웃 — 볼륨을 서서히 0까지 내린 뒤 정지·처음으로 되감고 원래 볼륨을 복원한다 */
+function fadeOutBgm(ms=1000){
+  const a = document.getElementById('bgm');
+  if (a.paused) return Promise.resolve();
+  return new Promise(res=>{
+    const v0 = a.volume, t0 = performance.now();
+    const iv = setInterval(()=>{        // rAF는 백그라운드 탭에서 멈춘다 — 시간 기준 setInterval로
+      const k = Math.min(1, (performance.now()-t0)/ms);
+      a.volume = v0*(1-k);
+      if (k >= 1){ clearInterval(iv); a.pause(); a.currentTime = 0; a.volume = v0; res(); }
+    }, 50);
+  });
+}
 function goHome(){
   S = freshState();   // 진행 상태만 삭제 (설정·보관함 유지 — §2.5)
+  // 재생 중이던 음악은 페이드아웃으로 끄고, 랜딩은 첫 방문처럼 곡 처음부터 다시 시작한다
+  fadeOutBgm().then(()=>{ if (settings.soundEnabled) armBgmAutostart(); });
   go('scr01');
 }
 

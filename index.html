@@ -105,7 +105,7 @@ img.px{ image-rendering:pixelated; }
 .icard .del{ position:absolute; top:-9px; right:-9px; width:22px; height:22px; line-height:16px;
   background:var(--surface); border:2px solid var(--text); border-radius:50%; cursor:pointer;
   font-family:var(--f-strong); font-weight:800; font-size:14px; padding:0; z-index:3; }
-.icard .cap{ overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; word-break:break-all; }
+.icard .cap{ overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; word-break:keep-all; overflow-wrap:anywhere; } /* 어절 단위 줄바꿈, 칸보다 긴 단어만 예외적으로 분리(anywhere: 긴 단어가 카드 폭을 늘리지 않게) */
 
 .addrow{ display:flex; gap:12px; margin:4px 0 24px; justify-content:center; }
 .addrow button{ flex:0 0 88px; height:72px; background:var(--surface); border:2px solid var(--text); border-radius:2px;

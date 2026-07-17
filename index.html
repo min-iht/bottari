@@ -911,6 +911,12 @@ document.querySelectorAll('.snowwrap').forEach(w=>{
   }
 });
 
+// 폰트 예열 — 첫 화면에 안 쓰이는 폰트(Terrarum 등)는 해당 화면이 뜰 때야 로드가 시작돼
+// font-display:swap 대체 폰트가 번쩍인다(FOUT). 랜딩이 떠 있는 동안 전부 미리 내려받는다.
+['16px Terrarum','16px DosSammul','16px DosStory',
+ '400 16px PfStardust30','700 16px PfStardust30','800 16px PfStardust30']
+  .forEach(f=>document.fonts.load(f));
+
 // 공유 링크(?data=)로 들어온 수신자는 SCR-13(수신자 열기)부터 시작
 go(new URLSearchParams(location.search).has('data') ? 'scr13' : 'scr01');
 armBgmAutostart();

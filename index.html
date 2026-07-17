@@ -49,6 +49,7 @@ img.px{ image-rendering:pixelated; }
 .scr{ display:none; flex:1; flex-direction:column; padding:24px 11.5% 32px; position:relative; }
 .scr.active{ display:flex; animation:fadeIn .25s ease; }
 @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+#scr07.active{ animation-duration:1.2s; } /* 전환 연출은 서서히 떠오르게 — 기본 .25s는 너무 급함 */
 .center-col{ justify-content:center; align-items:center; text-align:center; gap:24px; }
 
 /* ===== 헤더 ===== */
@@ -310,9 +311,9 @@ img.px{ image-rendering:pixelated; }
   </section>
 
   <!-- SCR-09 엔딩 애니메이션 (시안 13) — FN-12: 풀블리드 재생, ended/실패/탭 → SCR-10 -->
-  <section class="scr" id="scr09" style="background:#1C1C1C;padding:0" onclick="endVideo()">
+  <section class="scr" id="scr09" style="background:#000;padding:0" onclick="endVideo()">
     <video id="endVid" src="img/video_ending.mp4" muted playsinline preload="auto"
-      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1s ease"></video>
   </section>
 
   <!-- SCR-10 맡겨두기 분기 (시안 14) -->
@@ -470,7 +471,7 @@ img.px{ image-rendering:pixelated; }
 const LIMITS = {1:10, 2:5, 3:3};
 let S = freshState();
 function freshState(){
-  return { name:'', tier:1, step:null, forcedMinTier:0, items:[], isFinalTier:false };
+  return { name:'', tier:1, step:null, forcedMinTier:0, items:[], isFinalTier:false, seeded:false };
 }
 let settings = { soundEnabled:true };
 let archive = [];          // ArchiveEntry[] (프로토타입: 메모리)
@@ -516,7 +517,10 @@ function go(id){
 /* FN-12: 엔딩 영상 — ended/재생 실패/탭 3종 트리거로 SCR-10 */
 function startEnding(){
   const v = document.getElementById('endVid');
+  v.style.opacity = 1;
   v.currentTime = 0;
+  // 마지막 1초 구간에서 영상을 검정으로 fade out — 섹션 배경(#000)이 드러나며 어두워진 뒤 SCR-10으로
+  v.ontimeupdate = ()=>{ if (v.duration && v.duration - v.currentTime <= 1) v.style.opacity = 0; };
   v.onended = ()=>go('scr10');
   v.onerror = ()=>go('scr10');
   v.play().catch(()=>{ if (curScr==='scr09') go('scr10'); });
@@ -567,6 +571,11 @@ function renderTiers(){
 /* ═══════ FN-06~10 꾸리기 ═══════ */
 function limit(){ return LIMITS[S.tier]; }
 function renderPack(){
+  // 1단계 첫 진입 시 예시 아이템 1개를 미리 담아둔다 — 빈 보자기 앞에서 이탈하지 않고 봇짐 매기를 바로 눌러볼 수 있게 (삭제 가능)
+  if (S.tier===1 && S.items.length===0 && !S.seeded){
+    S.seeded = true;
+    S.items.push({ id:'item_seed_'+Date.now(), type:'text', textContent:'(예시) 창밖으로 첫눈이 내리던 날의 기억' });
+  }
   document.getElementById('clothImg').src = 'img/wrap_' + ['bb','mb','sb'][S.tier-1] + '.png';
   const grid = document.getElementById('itemGrid');
   grid.className = 'items tier' + S.tier;
@@ -669,7 +678,7 @@ function startTransition(){
     `<div class="row"><span class="who">${S.name} :</span><span class="txt">${from===1?'어휴, 좀 무거운데?':'흠, 여전히 무거운데?'}
      <span class="inner">(더 작은 보자기로, 정말 소중한 것만<br>다시 골라 담아야 할 것 같다.)</span></span></div>`;
   syncDev();
-  transTimer = setTimeout(()=>go('scr05'), 3000);
+  transTimer = setTimeout(()=>go('scr05'), 4000);   // fade in 1.2s만큼 표시 시간 보정 (기존 3s)
 }
 function skipTransition(){ go('scr05'); }
 function endVideo(){ go('scr10'); }

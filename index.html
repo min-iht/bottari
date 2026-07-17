@@ -472,7 +472,7 @@ let S = freshState();
 function freshState(){
   return { name:'', tier:1, step:null, forcedMinTier:0, items:[], isFinalTier:false };
 }
-let settings = { soundEnabled:false };
+let settings = { soundEnabled:true };
 let archive = [];          // ArchiveEntry[] (프로토타입: 메모리)
 let owned = [];            // 내가 등록한 보따리 id (bottari_owned_v1 상당 — FN-17 기록, FN-23 사용)
 let sharePw = null;        // FN-14: 메모리 변수만, 저장 금지
@@ -805,29 +805,25 @@ function openSettings(){
   document.getElementById('sndToggle').classList.toggle('on', settings.soundEnabled);
   openModal('mdSettings');
 }
-/* BGM 증폭 체인 — 원본 음원이 표준 대비 약 20dB 작음(peak -22.4dBFS, RMS -38.7dB)
-   → GainNode ×12(+21.6dB)로 표준 음량(RMS 약 -17dB) 보정, 리미터로 클리핑 방지 */
-let bgmCtx = null;
-function ensureBgmChain(){
-  if (bgmCtx) return;
-  bgmCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const src = bgmCtx.createMediaElementSource(document.getElementById('bgm'));
-  const gain = bgmCtx.createGain(); gain.gain.value = 12;
-  const lim = bgmCtx.createDynamicsCompressor();
-  lim.threshold.value = -3; lim.knee.value = 0; lim.ratio.value = 20;
-  lim.attack.value = 0.002; lim.release.value = 0.1;
-  src.connect(gain); gain.connect(lim); lim.connect(bgmCtx.destination);
-}
+/* BGM (FN-22) — 음원은 표준 라우드니스 -16 LUFS로 정규화되어 있어 재생 측 증폭이 필요 없다 */
 function toggleSound(){
   settings.soundEnabled = !settings.soundEnabled;
   document.getElementById('sndToggle').classList.toggle('on', settings.soundEnabled);
   const bgm = document.getElementById('bgm');
-  if (settings.soundEnabled){
-    ensureBgmChain(); bgmCtx.resume();
-    bgm.play().catch(()=>toast('BGM을 재생하지 못했어요'));
-  } else {
-    bgm.pause();
-  }
+  if (settings.soundEnabled) bgm.play().catch(()=>toast('BGM을 재생하지 못했어요'));
+  else bgm.pause();
+}
+/* 기본 ON이지만 autoplay 정책상 부팅 즉시 재생할 수 없어 첫 제스처에서 시작한다 (FN-22-4) */
+function armBgmAutostart(){
+  const start = ()=>{
+    if (!settings.soundEnabled) return;
+    document.getElementById('bgm').play().then(()=>{
+      document.removeEventListener('pointerdown', start);
+      document.removeEventListener('keydown', start);
+    }).catch(()=>{});
+  };
+  document.addEventListener('pointerdown', start);
+  document.addEventListener('keydown', start);
 }
 /* ═══════ FN-23 보관함에서 꺼내기 ═══════ */
 function openRemoveConfirm(){ openModal('mdRemove'); }
@@ -850,8 +846,8 @@ function doRemove(){
 
 function openResetConfirm(){ closeModal('mdSettings'); openModal('mdReset'); }
 function doReset(){
-  S = freshState(); settings = { soundEnabled:false }; archive = []; owned = []; sharePw = null; sharePayload = null;
-  document.getElementById('bgm').pause();
+  S = freshState(); settings = { soundEnabled:true }; archive = []; owned = []; sharePw = null; sharePayload = null;
+  document.getElementById('bgm').play().catch(()=>{});   // 기본값(ON)으로 복귀
   closeModal('mdReset'); go('scr01');
 }
 
@@ -907,6 +903,7 @@ document.querySelectorAll('.snowwrap').forEach(w=>{
 });
 
 go('scr01');
+armBgmAutostart();
 </script>
 </body>
 </html>

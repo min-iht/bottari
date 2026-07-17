@@ -57,7 +57,7 @@ MVP가 기능 골격(첨부·암호화·공유)을 검증했다면, 리뉴얼의
 - 재선택 규칙(DESIGN.md §0-4): 이월된 아이템이 한도를 초과하는 동안 카운터 강조색 표시,
   '봇짐 매기'는 disabled(opacity 0.4). 한도 이하가 되면 단계색으로 활성화.
 - 설정은 사운드 토글 + 전체 초기화만 (암호 변경 제외 — DESIGN.md §0-3).
-- 사운드 기본 OFF, 무료 CC0 8-bit 음원, `sound/` 파일 교체만으로 변경 가능.
+- 사운드 기본 ON, 무료 CC0 8-bit 음원, 파일 교체만으로 변경 가능(BGM은 `bgm/bottari_bgm.mp3`, SFX는 `sound/`).
 - 모바일 우선(시안이 모바일 세로형), 375/768/1280 검증. 데스크톱은 중앙 정렬 확장.
 - 시안 카피는 글자 그대로 사용(DESIGN.md §8). 픽셀아트 에셋은 `img/` 사용, `draft/` 원본 수정 금지.
 - 배포 대상: GitHub Pages (기존 min-iht.github.io/bottari 대체 여부는 push 시점에 결정).
@@ -116,7 +116,7 @@ MVP가 기능 골격(첨부·암호화·공유)을 검증했다면, 리뉴얼의
 | items[].textContent | string | (text) 자유 텍스트 |
 | items[].mapLink / mapCaption | string | (map) URL + 캡션 |
 | isFinalTier | boolean | 3단계 도달 여부 (엔딩 개방) |
-| settings.soundEnabled | boolean | 사운드 토글 상태 (기본 false) |
+| settings.soundEnabled | boolean | 사운드 토글 상태 (기본 true) |
 
 ### ArchiveEntry (보관함 — Supabase `bottari_archive` 테이블 / localStorage 폴백)
 

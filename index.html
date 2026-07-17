@@ -831,7 +831,8 @@ function toggleSound(){
   if (settings.soundEnabled) bgm.play().catch(()=>toast('BGM을 재생하지 못했어요'));
   else bgm.pause();
 }
-/* 기본 ON이지만 autoplay 정책상 부팅 즉시 재생할 수 없어 첫 제스처에서 시작한다 (FN-22-4) */
+/* 기본 ON — 로드 직후 즉시 재생을 시도해 허용 환경(재방문 등)에선 랜딩부터 흐르게 하고,
+   autoplay 정책에 차단되면 첫 제스처(화면 아무 곳 터치·키 입력)에서 시작한다 (FN-22-4) */
 function armBgmAutostart(){
   const start = ()=>{
     if (!settings.soundEnabled) return;
@@ -842,6 +843,7 @@ function armBgmAutostart(){
   };
   document.addEventListener('pointerdown', start);
   document.addEventListener('keydown', start);
+  start();   // 차단되면 catch로 조용히 넘어가고 위 리스너가 제스처를 기다린다
 }
 /* ═══════ FN-23 보관함에서 꺼내기 ═══════ */
 function openRemoveConfirm(){ openModal('mdRemove'); }

@@ -331,6 +331,7 @@ img.px{ image-rendering:pixelated; }
 
   <!-- SCR-11 암호 설정 (시안 14-1-1) -->
   <section class="scr" id="scr11" style="align-items:center">
+    <button class="backbtn" onclick="go('scr10')">←</button>
     <div class="hd" style="width:100%"><h2>보따리 맡겨두기</h2></div>
     <div class="dialog" style="margin-top:14px">소중한 이가 언젠가 열어볼 수 있도록<br><span style="font-family:var(--f-strong);font-weight:800;font-size:23px">암호</span>를 정하자.<br>
       <span class="sub">*이 암호를 아는 사람만 보따리를 열어볼 수 있어요.(4자 이상)</span>
@@ -358,7 +359,8 @@ img.px{ image-rendering:pixelated; }
     </div>
     <button class="btn" style="margin-top:30px" onclick="shareUrlBtn()">공유하기</button>
     <div style="flex:1 0 100px"></div><!-- 최소 100px 간격 + 남는 공간 흡수 → 아래 버튼을 화면 하단으로 -->
-    <button class="btn outline" onclick="goHome()">처음으로 돌아가기</button><!-- §6 이탈표: SCR-12 이탈은 처음으로(→SCR-01)뿐 -->
+    <button class="btn outline" onclick="goHome()">처음으로 돌아가기</button>
+    <button class="btn outline" style="margin-top:12px" onclick="go('scr10')">이전으로 돌아가기</button>
   </section>
 
   <!-- SCR-13 수신자 열기 (시안 14-1-2-1) -->
@@ -377,6 +379,7 @@ img.px{ image-rendering:pixelated; }
 
   <!-- SCR-14 보관함 (시안 14-2-1) -->
   <section class="scr" id="scr14" style="align-items:center">
+    <button class="backbtn" onclick="go('scr10')">←</button>
     <div class="hd" style="width:100%"><h2>보따리 보관함</h2></div>
     <p style="text-align:center;font-size:15px;line-height:20px;margin-top:24px">다른 나그네들이 맡기고 떠난 보따리예요.<br>어떤 소중한 기억을 남기고 갔을지 들여다 볼까요?</p>
     <p style="text-align:center;font-size:12px;color:var(--text-sub);margin-top:10px">*보따리를 클릭하면 풀어볼 수 있어요.</p>

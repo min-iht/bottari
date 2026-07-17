@@ -519,8 +519,11 @@ function startEnding(){
   const v = document.getElementById('endVid');
   v.style.opacity = 1;
   v.currentTime = 0;
-  // 마지막 1초 구간에서 영상을 검정으로 fade out — 섹션 배경(#000)이 드러나며 어두워진 뒤 SCR-10으로
-  v.ontimeupdate = ()=>{ if (v.duration && v.duration - v.currentTime <= 1) v.style.opacity = 0; };
+  // 3초부터 검정으로 fade out(1s) → 4.3초에 컷 — 8초 영상을 3~4초 지점에서 마무리 (2026-07-17 확정)
+  v.ontimeupdate = ()=>{
+    if (v.currentTime >= 3) v.style.opacity = 0;
+    if (v.currentTime >= 4.3 && curScr==='scr09') go('scr10');
+  };
   v.onended = ()=>go('scr10');
   v.onerror = ()=>go('scr10');
   v.play().catch(()=>{ if (curScr==='scr09') go('scr10'); });

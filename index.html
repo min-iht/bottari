@@ -25,16 +25,16 @@
 }
 *{box-sizing:border-box; margin:0; padding:0;}
 html,body{height:100%;}
-body{ background:#FFFFFF; font-family:var(--f-body); color:var(--text); padding-top:44px; }
+body{ background:#FFFFFF; font-family:var(--f-body); color:var(--text); }
 /* 웹(넓은 화면)에서만 앱 프레임 바깥 배경을 분홍으로 — 모바일(≤480px)에서는 앱이 꽉 차서 흰 배경 유지 */
 @media (min-width:481px){ body{ background:#FFE8E8; } }
 img.px{ image-rendering:pixelated; }
 
-/* ===== 개발용 바 (프로토타입 전용 — 실제 화면 아님) ===== */
+/* ===== 개발용 바 (프로토타입 전용 — 기본 숨김, ?dev 파라미터로만 표시) ===== */
 #devbar{
   position:fixed; top:0; left:0; right:0; z-index:900;
   background:#26221E; color:#EFE9E0; font-size:12px; font-family:var(--f-logo);
-  display:flex; align-items:center; gap:12px; padding:6px 12px; flex-wrap:wrap;
+  display:none; align-items:center; gap:12px; padding:6px 12px; flex-wrap:wrap;
 }
 #devbar select,#devbar label{ font-family:inherit; font-size:12px; }
 #devbar .st{ color:#B9AE9D; }
@@ -43,7 +43,7 @@ img.px{ image-rendering:pixelated; }
 /* ===== 앱 프레임 (§2: max 480, 중앙 정렬) ===== */
 #app{
   max-width:480px; margin:0 auto; background:var(--bg);
-  min-height:calc(100vh - 44px); position:relative; overflow:hidden;
+  min-height:100vh; position:relative; overflow:hidden;
   display:flex; flex-direction:column;
 }
 .scr{ display:none; flex:1; flex-direction:column; padding:24px 11.5% 32px; position:relative; }
@@ -700,7 +700,8 @@ function confirmPw(){
   // 프로토타입: 암호화 대신 모의 base64url 페이로드
   let mock=''; const abc='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
   for(let i=0;i<160;i++) mock += abc[Math.floor(Math.random()*abc.length)];
-  document.getElementById('shareUrl').value = location.origin + '/?data=' + mock;
+  // GitHub Pages 프로젝트 사이트(/bottari/)에서도 유효하도록 현재 경로 기준으로 생성 (origin만 쓰면 404)
+  document.getElementById('shareUrl').value = location.origin + location.pathname + '?data=' + mock;
   go('scr12');
 }
 function copyUrl(){
@@ -875,15 +876,11 @@ const SCREENS = {
   Object.entries(SCREENS).forEach(([v,t])=>{
     const o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o);
   });
-  if (location.search.includes('clean')){   // 스크린샷·시안 대조용: 개발 바 숨김
-    document.getElementById('devbar').style.display = 'none';
-    document.body.style.paddingTop = '0';
-    document.getElementById('app').style.minHeight = '100vh';
-  }
-  // 좁은 폭에서 개발 바가 여러 줄로 감기면 고정 44px 오프셋을 넘어 화면을 덮는다 → 실제 높이로 동기화
+  if (!new URLSearchParams(location.search).has('dev')) return;   // 기본 숨김 — ?dev 로만 표시 (배포본 노출 방지)
   const bar = document.getElementById('devbar'), app = document.getElementById('app');
+  bar.style.display = 'flex';
+  // 좁은 폭에서 개발 바가 여러 줄로 감기면 고정 오프셋을 넘어 화면을 덮는다 → 실제 높이로 동기화
   function fitDevbar(){
-    if (bar.style.display === 'none') return;
     const h = bar.offsetHeight;
     document.body.style.paddingTop = h + 'px'; app.style.minHeight = `calc(100vh - ${h}px)`;
     document.documentElement.style.setProperty('--devbarH', h + 'px');
@@ -914,7 +911,8 @@ document.querySelectorAll('.snowwrap').forEach(w=>{
   }
 });
 
-go('scr01');
+// 공유 링크(?data=)로 들어온 수신자는 SCR-13(수신자 열기)부터 시작
+go(new URLSearchParams(location.search).has('data') ? 'scr13' : 'scr01');
 armBgmAutostart();
 </script>
 </body>

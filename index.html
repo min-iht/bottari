@@ -52,7 +52,7 @@ img.px{ image-rendering:pixelated; }
 .center-col{ justify-content:center; align-items:center; text-align:center; gap:24px; }
 
 /* ===== 헤더 ===== */
-.hd{ position:relative; display:flex; align-items:center; justify-content:center; margin:24px 0 12px; }
+.hd{ position:relative; display:flex; align-items:center; justify-content:center; margin:56px 0 12px; } /* 시안 공통: 타이틀 상단 여백(화면 높이의 ~12%) */
 .hd h2{ font-family:var(--f-strong); font-weight:800; font-size:26px; }
 .icon-btn{ width:44px; height:44px; background:none; border:none; font-size:22px; cursor:pointer; }
 .icon-btn.corner{ position:absolute; top:16px; right:20px; }
@@ -76,7 +76,7 @@ img.px{ image-rendering:pixelated; }
   background:var(--surface); border:2px solid var(--text); border-radius:2px;
   padding:30px 20px; text-align:center; font-size:21px; line-height:20px; width:100%;
 }
-.dialog .sub{ font-size:12.5px; color:var(--text-sub); }
+.dialog .sub{ font-size:12.5px; color:var(--text-sub); word-break:keep-all; } /* 어절 중간 줄바꿈 방지 */
 .speech{ position:relative; background:var(--surface); border:3px solid var(--text); border-radius:2px;
   padding:22px 20px 22px 40px; font-size:18px; line-height:20px; text-align:left; width:100%; }
 .speech::before{ content:""; position:absolute; top:-40px; left:6px; width:26px; height:28px; /* 높이 28px + 여백 12px */
@@ -84,9 +84,10 @@ img.px{ image-rendering:pixelated; }
 .speech .row{ display:flex; gap:6px; }
 #tierSpeech .row{ justify-content:center; } /* 시안 5: 말풍선 내용 중앙정렬 */
 .speech .who{ white-space:nowrap; }
-.speech .inner{ color:var(--text-sub); display:block; }
+.speech .inner{ color:var(--text-sub); display:block; font-size:15px; } /* 시안 7·16: 괄호 독백은 본문보다 한 단계 작게 — 고정 줄바꿈이 한 줄에 들어감 */
 
 .counter{ font-family:var(--f-strong); font-weight:400; font-size:16px; text-align:center; margin:10px 0 12px; }
+.counter .n{ font-size:21px; font-weight:800; } /* 시안 6: 담은 개수 숫자가 라벨보다 크고 굵게 */
 .counter .n.over{ color:var(--alert); }
 
 .board{ position:relative; width:100%; aspect-ratio:1; margin-bottom:12px;
@@ -186,7 +187,7 @@ img.px{ image-rendering:pixelated; }
   animation:fall linear infinite; }
 @keyframes fall{ to{ transform:translateY(110vh); } }
 
-.logo-ko{ font-family:var(--f-logo); font-size:96px; letter-spacing:6px; }
+.logo-ko{ font-family:var(--f-logo); font-size:min(96px,20vw); letter-spacing:6px; white-space:nowrap; }
 .logo-en{ font-family:var(--f-latin); font-size:20px; color:var(--text); letter-spacing:5px; margin-top:8px; }
 .tagline{ font-family:var(--f-logo); font-size:15px; color:var(--text); letter-spacing:0; }
 .narr{ font-size:17px; line-height:20px; text-align:center; }
@@ -205,9 +206,9 @@ img.px{ image-rendering:pixelated; }
 /* wrap_sb.png는 그림이 약 53%뿐(사방 ~23% 흰 배경) → 보드를 시안 크기로 줄이고 확대·클리핑해 흰 띠 제거 */
 #scr15 .board{ width:56%; overflow:hidden; }
 #scr15 .cloth{ transform:scale(1.85); }
-.vthumbs{ position:relative; z-index:2; display:grid; grid-template-columns:repeat(2,78px);
-  gap:14px; justify-content:center; height:100%; align-content:center; }
-.vthumbs .icard{ width:78px; min-width:0; overflow:hidden; font-size:10px; }
+.vthumbs{ position:relative; z-index:2; display:grid; grid-template-columns:repeat(2,44px);
+  gap:10px; justify-content:center; height:100%; align-content:center; }
+.vthumbs .icard{ width:44px; min-width:0; overflow:hidden; font-size:8px; padding:2px; } /* 시안 14-2-2: 카드가 보드(≈162px) 안에 1+2 배치로 들어가는 크기 */
 .vthumbs .icard:first-child:nth-last-child(3){ grid-column:1 / 3; justify-self:center; position:relative; top:-3px; } /* 3개일 때 위1·아래2 (시안 14-2-2) */
 </style>
 </head>
@@ -221,6 +222,7 @@ img.px{ image-rendering:pixelated; }
   <label><input type="checkbox" id="simRegFail"> 등록 실패</label>
   <label><input type="checkbox" id="simListFail"> 조회 실패</label>
   <label><input type="checkbox" id="simBroken"> 손상 링크</label>
+  <label><input type="checkbox" id="simRemoveFail"> 꺼내기 실패</label>
 </div>
 
 <div id="app">
@@ -269,7 +271,7 @@ img.px{ image-rendering:pixelated; }
   <section class="scr" id="scr05">
     <button class="icon-btn corner" onclick="openSettings()">⚙</button>
     <div class="hd"><h2>보자기를 골라보자</h2></div>
-    <div class="speech" id="tierSpeech" style="max-width:310px;margin:10px auto 10px;padding-left:15px"></div>
+    <div class="speech" id="tierSpeech" style="max-width:310px;margin:42px auto 10px;padding-left:15px"></div>
     <div class="tiercards" id="tierCards"></div>
   </section>
 
@@ -307,13 +309,10 @@ img.px{ image-rendering:pixelated; }
     <button class="btn" style="max-width:156px;min-height:60px;font-size:20px;font-family:var(--f-logo);margin-top:21px" onclick="go('scr09')">GO!</button>
   </section>
 
-  <!-- SCR-09 엔딩 애니메이션 (시안 13) — 프로토타입에서는 영상 자리 표시 -->
-  <section class="scr center-col" id="scr09" style="background:#1C1C1C;color:#fff" onclick="endVideo()">
-    <p style="font-size:15px;line-height:20px;text-align:center">
-      🎞 <code>img/video_ending.mp4</code> 풀블리드 재생 자리<br>
-      <span style="color:#8A8A8A;font-size:12px">(muted · playsinline · 종료/실패/탭 → 다음 화면)</span>
-    </p>
-    <p style="color:#8A8A8A;font-size:12px">3초 후 자동 진행 · 탭하면 건너뛰어요</p>
+  <!-- SCR-09 엔딩 애니메이션 (시안 13) — FN-12: 풀블리드 재생, ended/실패/탭 → SCR-10 -->
+  <section class="scr" id="scr09" style="background:#1C1C1C;padding:0" onclick="endVideo()">
+    <video id="endVid" src="img/video_ending.mp4" muted playsinline preload="auto"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
   </section>
 
   <!-- SCR-10 맡겨두기 분기 (시안 14) -->
@@ -332,6 +331,7 @@ img.px{ image-rendering:pixelated; }
 
   <!-- SCR-11 암호 설정 (시안 14-1-1) -->
   <section class="scr" id="scr11" style="align-items:center">
+    <button class="backbtn" onclick="go('scr10')">←</button>
     <div class="hd" style="width:100%"><h2>보따리 맡겨두기</h2></div>
     <div class="dialog" style="margin-top:14px">소중한 이가 언젠가 열어볼 수 있도록<br><span style="font-family:var(--f-strong);font-weight:800;font-size:23px">암호</span>를 정하자.<br>
       <span class="sub">*이 암호를 아는 사람만 보따리를 열어볼 수 있어요.(4자 이상)</span>
@@ -358,7 +358,7 @@ img.px{ image-rendering:pixelated; }
       <button onclick="copyUrl()">복사</button>
     </div>
     <button class="btn" style="margin-top:30px" onclick="shareUrlBtn()">공유하기</button>
-    <div style="flex:1 0 100px"></div><!-- 최소 100px 간격 + 남는 공간 흡수 → 아래 버튼들을 화면 하단으로 -->
+    <div style="flex:1 0 100px"></div><!-- 최소 100px 간격 + 남는 공간 흡수 → 아래 버튼을 화면 하단으로 -->
     <button class="btn outline" onclick="go('scr10')">이전으로 돌아가기</button>
     <button class="btn outline" style="margin-top:12px" onclick="goHome()">처음으로 돌아가기</button>
   </section>
@@ -379,14 +379,12 @@ img.px{ image-rendering:pixelated; }
 
   <!-- SCR-14 보관함 (시안 14-2-1) -->
   <section class="scr" id="scr14" style="align-items:center">
+    <button class="backbtn" onclick="go('scr10')">←</button>
     <div class="hd" style="width:100%"><h2>보따리 보관함</h2></div>
     <p style="text-align:center;font-size:15px;line-height:20px;margin-top:24px">다른 나그네들이 맡기고 떠난 보따리예요.<br>어떤 소중한 기억을 남기고 갔을지 들여다 볼까요?</p>
     <p style="text-align:center;font-size:12px;color:var(--text-sub);margin-top:10px">*보따리를 클릭하면 풀어볼 수 있어요.</p>
     <div class="sbox"><div class="sgrid" id="storageGrid"></div></div>
-    <div style="display:flex;gap:12px;width:100%">
-      <button class="btn outline" style="flex:1" onclick="go('scr10')">이전으로 돌아가기</button>
-      <button class="btn" style="flex:1" onclick="goHome()">처음으로 돌아가기</button>
-    </div>
+    <button class="btn" onclick="goHome()">처음으로 돌아가기</button><!-- §6 이탈표: SCR-14 이탈은 셀 클릭·처음으로뿐 (시안 14-2-1) -->
   </section>
 
   <!-- SCR-15 보따리 열람 (시안 14-2-2) -->
@@ -400,6 +398,7 @@ img.px{ image-rendering:pixelated; }
     <p style="text-align:center;font-size:15px;line-height:20px;margin-top:56px" id="viewCap"></p>
     <p style="text-align:center;font-size:12px;color:var(--text-sub);margin-top:14px">*클릭하면 확대해서 볼 수 있어요.</p>
     <div class="viewframe" id="viewFrame"><span style="color:var(--text-sub);font-size:13px">위 보따리 속 물건을 눌러보세요</span></div>
+    <button class="btn outline" id="removeBtn" style="margin-top:24px" onclick="openRemoveConfirm()">보관함에서 꺼내기</button><!-- FN-19 6항: archive 출처 + 내 등록분일 때만 표시 -->
   </section>
 
   <!-- ═══ 모달들 ═══ -->
@@ -440,6 +439,16 @@ img.px{ image-rendering:pixelated; }
     </div>
   </div>
 
+  <div class="overlay" id="mdRemove">
+    <div class="modal">
+      <h3>이 보따리를 보관함에서 꺼낼까요?</h3><!-- FN-23-2: 한 줄, 보조 문구 없음 (2026-07-17 확정) -->
+      <div class="row2">
+        <button class="btn" id="removeOk" onclick="doRemove()">확인</button>
+        <button class="btn outline" onclick="closeModal('mdRemove')">취소</button>
+      </div>
+    </div>
+  </div>
+
   <div class="overlay" id="mdReset">
     <div class="modal">
       <h3>저장된 모든 데이터를 삭제할까요?</h3>
@@ -465,11 +474,12 @@ function freshState(){
 }
 let settings = { soundEnabled:false };
 let archive = [];          // ArchiveEntry[] (프로토타입: 메모리)
+let owned = [];            // 내가 등록한 보따리 id (bottari_owned_v1 상당 — FN-17 기록, FN-23 사용)
 let sharePw = null;        // FN-14: 메모리 변수만, 저장 금지
 let sharePayload = null;   // 공유 페이로드 {name, items}
 let view = { source:null, entry:null }; // SCR-15 진입 출처
 let curScr = 'scr01';
-let transTimer = null, vidTimer = null;
+let transTimer = null;
 
 /* ═══════ 은/는 조사 (§3.1) ═══════ */
 function josa(name){
@@ -488,7 +498,9 @@ function toast(msg){
   clearTimeout(t._tm); t._tm = setTimeout(()=>t.classList.remove('show'), 1500);
 }
 function go(id){
-  clearTimeout(transTimer); clearTimeout(vidTimer);
+  clearTimeout(transTimer);
+  const ev = document.getElementById('endVid');
+  if (ev && !ev.paused && id!=='scr09') ev.pause();
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   curScr = id;
@@ -496,10 +508,18 @@ function go(id){
   if (id==='scr05') renderTiers();
   if (id==='scr06') renderPack();
   if (id==='scr07') startTransition();
-  if (id==='scr09') vidTimer = setTimeout(()=>go('scr10'), 3000);
+  if (id==='scr09') startEnding();
   if (id==='scr14') renderStorage();
   if (id==='scr15') renderView();
   syncDev();
+}
+/* FN-12: 엔딩 영상 — ended/재생 실패/탭 3종 트리거로 SCR-10 */
+function startEnding(){
+  const v = document.getElementById('endVid');
+  v.currentTime = 0;
+  v.onended = ()=>go('scr10');
+  v.onerror = ()=>go('scr10');
+  v.play().catch(()=>{ if (curScr==='scr09') go('scr10'); });
 }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
@@ -721,8 +741,10 @@ function registerArchive(){
       toast('보관함에 맡기지 못했어요. 다시 시도해 주세요');   // 문안 #14 ★신규 — SCR-10 잔류
       return;
     }
-    archive.unshift({ id:crypto.randomUUID(), name:S.name,
+    const entryId = crypto.randomUUID();
+    archive.unshift({ id:entryId, name:S.name,
       items:S.items.map(({id, ...rest})=>rest), created_at:new Date().toISOString() });
+    owned.push(entryId);   // 소유 증명 기록 (FN-17 → FN-23)
     go('scr14');   // 진행 상태는 삭제하지 않음 (FN-17-5)
   }, 400);
 }
@@ -732,7 +754,7 @@ function renderStorage(){
   const fail = document.getElementById('simListFail').checked;
   if (fail) toast('보따리를 불러오지 못했어요. 다시 시도해 주세요');   // 문안 #15 ★신규 + 빈 그리드
   const list = fail ? [] : archive;
-  const cells = Math.max(9, Math.ceil(list.length/3)*3);   // 최소 9셀(3×3), 3열 유지
+  const cells = Math.max(12, Math.ceil(list.length/3)*3);   // 시안 14-2-1: 최소 12셀(3×4), 3열 유지
   for (let i=0;i<cells;i++){
     const cell = document.createElement('div');
     if (list[i]){
@@ -751,6 +773,9 @@ function renderStorage(){
 function renderView(){
   const e = view.entry;
   document.getElementById('viewBack').style.display = (view.source==='archive') ? '' : 'none';
+  // FN-19 6항: archive 출처 + 소유 증명 보유분만 꺼내기 노출
+  document.getElementById('removeBtn').style.display =
+    (view.source==='archive' && owned.includes(e.id)) ? '' : 'none';
   document.getElementById('viewTitle').textContent = `나그네 ${e.name}의 보따리`;
   document.getElementById('viewCap').innerHTML = `나그네 ${esc(e.name)}의<br>소중한 마음이 담긴 보따리예요.`;
   const th = document.getElementById('viewThumbs');
@@ -804,9 +829,28 @@ function toggleSound(){
     bgm.pause();
   }
 }
+/* ═══════ FN-23 보관함에서 꺼내기 ═══════ */
+function openRemoveConfirm(){ openModal('mdRemove'); }
+function doRemove(){
+  const btn = document.getElementById('removeOk');
+  btn.disabled = true;   // 중복 호출 방지 (FN-23-5)
+  setTimeout(()=>{
+    btn.disabled = false;
+    closeModal('mdRemove');
+    if (document.getElementById('simRemoveFail').checked){
+      toast('보따리를 꺼내지 못했어요. 다시 시도해 주세요');   // 문안 #16 — SCR-15 잔류
+      return;
+    }
+    const id = view.entry.id;
+    archive = archive.filter(a=>a.id!==id);
+    owned = owned.filter(o=>o!==id);
+    go('scr14');   // 목록 재조회 — 해당 셀 사라짐 (FN-23-4)
+  }, 300);
+}
+
 function openResetConfirm(){ closeModal('mdSettings'); openModal('mdReset'); }
 function doReset(){
-  S = freshState(); settings = { soundEnabled:false }; archive = []; sharePw = null; sharePayload = null;
+  S = freshState(); settings = { soundEnabled:false }; archive = []; owned = []; sharePw = null; sharePayload = null;
   document.getElementById('bgm').pause();
   closeModal('mdReset'); go('scr01');
 }

@@ -4,7 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>보따리 Bottari</title>
-<link rel="icon" href="img/sb.png">
+<link rel="icon" href="img/sb.webp">
+<!-- 폰트 CDN 연결·랜딩 화면 폰트 선로드 — 모바일 첫 진입 FOUT(돋움체 번쩍임) 방지 -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSSaemmul.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/DOSIyagiMedium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/projectnoonnu/2506-1@1.0/PFStardustExtraBold.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ===== 폰트 (font/font.txt 원문) ===== */
 @font-face { font-family:'DosSammul'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSSaemmul.woff') format('woff'); font-weight:normal; font-display:swap; }
@@ -232,7 +237,7 @@ img.px{ image-rendering:pixelated; }
   <section class="scr center-col" id="scr01">
     <div class="snowwrap"></div>
     <p class="tagline">디지털 기억 유산</p>
-    <img class="charimg px" src="img/character_default.png" alt="걷는 나그네 캐릭터">
+    <img class="charimg px" src="img/character_default.webp" alt="걷는 나그네 캐릭터">
     <div>
       <div class="logo-ko">보따리</div>
       <div class="logo-en" style="margin-top:-20px;letter-spacing:.06em">BOTTARI</div><!-- 96px 로고 폰트의 내부 하단 여백(~33px) 상쇄용 음수 마진 -->
@@ -304,7 +309,7 @@ img.px{ image-rendering:pixelated; }
   <!-- SCR-08 완료 (시안 12) -->
   <section class="scr center-col" id="scr08">
     <div class="snowwrap"></div>
-    <img class="charimg px" src="img/character_sb.png" alt="기뻐하는 나그네" style="width:150px">
+    <img class="charimg px" src="img/character_sb.webp" alt="기뻐하는 나그네" style="width:150px">
     <p class="narr" style="font-family:var(--f-strong);font-weight:800;font-size:31px;margin-top:43px">비로소, 가벼워졌다!</p>
     <div class="dialog" style="padding:34px 20px;margin-top:25px">가장 작은 보따리 안에 남은 세 가지.<br>나머지는 이미 충분했던 것들이었다.<br>이제 매듭을 짓고, 길을 떠나자.</div>
     <button class="btn" style="max-width:156px;min-height:60px;font-size:20px;font-family:var(--f-logo);margin-top:21px" onclick="go('scr09')">GO!</button>
@@ -312,7 +317,7 @@ img.px{ image-rendering:pixelated; }
 
   <!-- SCR-09 엔딩 애니메이션 (시안 13) — FN-12: 풀블리드 재생, ended/실패/탭 → SCR-10 -->
   <section class="scr" id="scr09" style="background:#000;padding:0" onclick="endVideo()">
-    <video id="endVid" src="img/video_ending.mp4" muted playsinline preload="auto"
+    <video id="endVid" src="img/video_ending.mp4" muted playsinline preload="none"
       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1s ease"></video>
   </section>
 
@@ -367,7 +372,7 @@ img.px{ image-rendering:pixelated; }
   <!-- SCR-13 수신자 열기 (시안 14-1-2-1) -->
   <section class="scr center-col" id="scr13"><!-- SCR-01과 동일한 기본 gap(24px) 사용 -->
     <p class="tagline">디지털 기억 유산</p>
-    <img class="charimg px" src="img/character_default.png" alt="걷는 나그네 캐릭터" style="width:150px">
+    <img class="charimg px" src="img/character_default.webp" alt="걷는 나그네 캐릭터" style="width:150px">
     <div><div class="logo-ko">보따리</div><div class="logo-en" style="margin-top:-20px;letter-spacing:.06em">BOTTARI</div></div><!-- SCR-01과 동일 로고 타이포 (96px/20px + 음수 마진) -->
     <div class="dialog" style="padding:36px 20px">누군가 보따리를 남겼습니다.<br>암호를 알고 있다면, 열어볼 수 있어요.
       <div class="uinput" style="margin-top:24px;max-width:111px;margin-inline:auto"><!-- 시안 14-1-2-1: SCR-03 이름 입력과 동일한 좁은 밑줄(111px)·좌측 정렬 -->
@@ -393,7 +398,7 @@ img.px{ image-rendering:pixelated; }
     <button class="backbtn" id="viewBack" onclick="go('scr14')">←</button>
     <h2 style="font-family:var(--f-strong);font-weight:800;font-size:25px;text-align:center;margin-top:24px" id="viewTitle"></h2>
     <div class="board" style="margin-top:64px;margin-bottom:0">
-      <img class="cloth px" src="img/wrap_sb.png" alt="매듭 풀린 보자기">
+      <img class="cloth px" src="img/wrap_sb.webp" alt="매듭 풀린 보자기">
       <div class="vthumbs" id="viewThumbs"></div>
     </div>
     <p style="text-align:center;font-size:15px;line-height:20px;margin-top:56px" id="viewCap"></p>
@@ -464,7 +469,7 @@ img.px{ image-rendering:pixelated; }
 </div>
 
 <div id="toast"></div>
-<audio id="bgm" src="bgm/bottari_bgm.mp3" loop preload="auto"></audio>
+<audio id="bgm" src="bgm/bottari_bgm.mp3" loop preload="none"></audio>
 
 <script>
 /* ═══════ 상태 (기능명세서 §2 BottariBundle) ═══════ */
@@ -550,9 +555,9 @@ function renderNarr2(){
 
 /* ═══════ FN-05 보자기 선택 ═══════ */
 const TIERS = [
-  {n:1, img:'bb.png', nm:'큰 보자기', lim:10},
-  {n:2, img:'mb.png', nm:'중간 보자기', lim:5},
-  {n:3, img:'sb.png', nm:'작은 보자기', lim:3},
+  {n:1, img:'bb.webp', nm:'큰 보자기', lim:10},
+  {n:2, img:'mb.webp', nm:'중간 보자기', lim:5},
+  {n:3, img:'sb.webp', nm:'작은 보자기', lim:3},
 ];
 function renderTiers(){
   document.getElementById('tierSpeech').innerHTML =
@@ -579,7 +584,7 @@ function renderPack(){
     S.seeded = true;
     S.items.push({ id:'item_seed_'+Date.now(), type:'text', textContent:'(예시) 보리를 처음 만난 순간' });
   }
-  document.getElementById('clothImg').src = 'img/wrap_' + ['bb','mb','sb'][S.tier-1] + '.png';
+  document.getElementById('clothImg').src = 'img/wrap_' + ['bb','mb','sb'][S.tier-1] + '.webp';
   const grid = document.getElementById('itemGrid');
   grid.className = 'items tier' + S.tier;
   grid.innerHTML = '';
@@ -660,7 +665,7 @@ function confirmMap(){
 function tieKnot(){
   const board = document.getElementById('board');
   const cloth = document.getElementById('clothImg');
-  cloth.src = 'img/' + ['bb','mb','sb'][S.tier-1] + '.png';   // 묶인 보따리로 스왑
+  cloth.src = 'img/' + ['bb','mb','sb'][S.tier-1] + '.webp';   // 묶인 보따리로 스왑
   document.getElementById('itemGrid').style.visibility = 'hidden';
   board.style.transition = 'transform .4s'; board.style.transform = 'scale(.98)';
   setTimeout(()=>{ board.style.transform = 'scale(1)'; }, 200);
@@ -676,7 +681,7 @@ function startTransition(){
   // 진입 시점에 즉시 갱신·저장 — items는 그대로 유지 (핵심 차이)
   const from = S.tier;
   S.forcedMinTier = from; S.tier = from + 1; S.step = 'select';
-  document.getElementById('transChar').src = 'img/' + (from===1?'character_bb.png':'character_mb.png');
+  document.getElementById('transChar').src = 'img/' + (from===1?'character_bb.webp':'character_mb.webp');
   document.getElementById('transSpeech').innerHTML =
     `<div class="row"><span class="who">${S.name} :</span><span class="txt">${from===1?'어휴, 좀 무거운데?':'흠, 여전히 무거운데?'}
      <span class="inner">(더 작은 보자기로, 정말 소중한 것만<br>다시 골라 담아야 할 것 같다.)</span></span></div>`;
@@ -772,7 +777,7 @@ function renderStorage(){
     const cell = document.createElement('div');
     if (list[i]){
       cell.className = 'scell filled';
-      cell.innerHTML = `<img class="px" src="img/sb.png" alt="맡겨진 보따리">
+      cell.innerHTML = `<img class="px" src="img/sb.webp" alt="맡겨진 보따리">
         <span class="nametag">${esc(list[i].name)}</span>`;
       cell.onclick = ()=>{ view = { source:'archive', entry:list[i] }; go('scr15'); };
     } else {
@@ -916,6 +921,16 @@ document.querySelectorAll('.snowwrap').forEach(w=>{
 ['16px Terrarum','16px DosSammul','16px DosStory',
  '400 16px PfStardust30','700 16px PfStardust30','800 16px PfStardust30']
   .forEach(f=>document.fonts.load(f));
+
+// 무거운 미디어 예열 — BGM(1.4MB)·엔딩 영상(1.6MB)이 preload=auto면 첫 진입부터
+// 폰트·이미지와 대역폭을 경쟁해 모바일 로드가 밀린다. 첫 화면이 다 뜬 뒤에 내려받는다.
+// 화면 전환 때 src가 바뀌는 이미지들도 같은 타이밍에 미리 받아 전환 순간 공백을 없앤다.
+window.addEventListener('load', ()=>{
+  ['character_bb','character_mb','character_sb','wrap_bb','wrap_mb','wrap_sb','bb','mb','sb']
+    .forEach(n=>{ new Image().src = 'img/' + n + '.webp'; });
+  document.getElementById('bgm').load();
+  document.getElementById('endVid').load();
+});
 
 // 공유 링크(?data=)로 들어온 수신자는 SCR-13(수신자 열기)부터 시작
 go(new URLSearchParams(location.search).has('data') ? 'scr13' : 'scr01');
